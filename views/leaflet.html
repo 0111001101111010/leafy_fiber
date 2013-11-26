@@ -1,7 +1,8 @@
 <html>
 <head>
-	<link rel='stylesheet' href='http://cdn.leafletjs.com/leaflet-0.6/leaflet.css' />
-	<script src='http://cdn.leafletjs.com/leaflet-0.6/leaflet.js' type='text/javascript'></script>
+	<link rel='stylesheet' href='http://cdn.leafletjs.com/leaflet-0.7/leaflet.css' />
+	<script src='http://cdn.leafletjs.com/leaflet-0.7/leaflet.js' type='text/javascript'></script>
+    <script src="http://ajax.googleapis.com/ajax/libs/jquery/1.10.2/jquery.min.js" type='text/javascript'></script>
 	<style type="text/css">
 		html, body {height: 100%;overflow: hidden;}
 		#map {height: 100%;}
@@ -9,7 +10,41 @@
 </head>
 <body>
 	<div id="map"></div>
+
+ <script>
+
+
+ //http://gis.stackexchange.com/questions/41491/openlayers-2-12-and-http-basic-authentication-woes/43526#43526
+jQuery.support.cors = true;
+
+
+var test = $.ajax({
+    url: 'http://nefms.nbtsolutions.net/api/',
+    data: '?VERSION=1.1.1&REQUEST=GetCapabilities&SERVICE=WMS',
+    method: 'GET',
+    error: function(jqXHR, textStatus, errorThrown){
+        // Handle not authoruzed here
+        console.log("nothing");
+    },
+    success: function(){
+    	console.log("something");
+        // Yuppieeeeee!
+        map.addLayer(myLayer);    // The browser wil set up the 
+                                  // authentication in the request for you
+    }
+}
+
+);
+
+
+
+
+</script>
+
+
 	<script>
+	console.log("hello");
+	
 	var map = new L.Map('map', {
 		center: [37.2708, -76.7069],
 		zoom: 10
@@ -18,9 +53,17 @@
 	L.tileLayer('http://{s}.tile.osm.org/{z}/{x}/{y}.png', {
 		attribution: '© OpenStreetMap contributors'
 	}).addTo(map);
-	
+
+
 	L.tileLayer('http://census.sparkgeo.com/{z}/{x}/{y}.png').addTo(map);
 
+
+	L.tileLayer.wms("http://mesonet.agron.iastate.edu/cgi-bin/wms/nexrad/n0r.cgi", {
+    layers: 'nexrad-n0r-900913',
+    format: 'image/png',
+    transparent: true,
+    attribution: "Weather data © 2012 IEM Nexrad"
+}).addTo(map);
 	</script>
 </body>
 </html>

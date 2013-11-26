@@ -58,6 +58,14 @@ io.sockets.on('connection', function(socket){
 /////// ADD ALL YOUR ROUTES HERE  /////////
 
 server.get('/', function(req,res){
+
+var fs = require('fs')
+var request = require('request');
+
+var lol = request('http://google.com/doodle.png').pipe(fs.createWriteStream('doodle.png'));
+console.log(lol);
+console.log("lol");
+
   res.render('index.jade', {
     locals : { 
               title : 'Your Page Title'
@@ -79,6 +87,7 @@ server.get('/leaflet', function(req,res){
              ,analyticssiteid: 'XXXXXXX' 
             }
   });
+  console.log('served');
 });
 
 
